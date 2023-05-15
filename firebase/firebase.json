@@ -1,5 +1,5 @@
 {
-    "firestore": {
-      "rules": "firestore-dev.rules"
-    }
+  "firestore": {
+    "rules": "firestore-dev.rules"
   }
+}
