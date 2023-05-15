@@ -13,7 +13,7 @@ jobs:
       - name: Apply
         uses: w9jds/firebase-action@master
         with:
-          args: deploy
+          args: deploy --only firestore:rules
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: ${{ env.FIREBASE_PROJECT_ID }}
