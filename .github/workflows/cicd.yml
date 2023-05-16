@@ -1,6 +1,8 @@
 name: Deploy Firebase Security Rules
 on:
   push:
+    paths:
+      - firebase/firestore.rules
     branches:
       - develop
       - main
@@ -13,13 +15,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Check Diff Firestore Rules
-        id: diff_firestore_rules
-        uses: technote-space/get-diff-action@v5
-        with:
-          FILES: |
-            firestore.rules
-
       - name: Deploy dev
         uses: w9jds/firebase-action@master
         with:
@@ -28,7 +23,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: fir-rule-c8168
           PROJECT_PATH: ./firebase
-        if: contains(steps.diff_firestore_rules.outputs.diff, 'firebase/firestore.rules') && github.ref == 'refs/heads/development'
+        if: github.ref == 'refs/heads/development'
 
       - name: Deploy prod
         uses: w9jds/firebase-action@master
@@ -38,4 +33,4 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: fir-rule-c8168
           PROJECT_PATH: ./firebase
-        if: contains(steps.diff_firestore_rules.outputs.diff, 'firebase/firestore.rules') && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
