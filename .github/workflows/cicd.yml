@@ -2,7 +2,7 @@ name: Deploy Firebase Security Rules
 on:
   push:
     paths:
-      - firebase/firestore.rules
+      - firebase/**
     branches:
       - develop
       - main
