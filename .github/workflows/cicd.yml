@@ -1,16 +1,17 @@
-name: DEV - Apply Firebase Security Rules
+name: Deploy Firebase Security Rules
 on:
   - workflow_dispatch
   - pull_request
 
 jobs:
   apply-security-rules:
-    name: Apply Firebase Rules (Development)
+    name: Deploy Firebase Rules 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
-      - name: Apply
+      - run: echo ${{ env.FIREBASE_PROJECT_ID }}
+      - name: deploy
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only firestore:rules
