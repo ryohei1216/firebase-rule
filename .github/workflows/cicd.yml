@@ -21,8 +21,9 @@ jobs:
             firestore.rules
 
       - name: echo
-        run: echo ${{ steps.diff_firestore_rules.outputs.diff }}
-        run: echo ${{ env.GIT_DIFF }}
+        run: |
+          echo ${{ steps.diff_firestore_rules.outputs.diff }}
+          echo ${{ env.GIT_DIFF }}
 
       - name: Deploy
         uses: w9jds/firebase-action@master
