@@ -18,7 +18,7 @@ jobs:
         uses: technote-space/get-diff-action@v5
         with:
           PATTERNS: |
-            firestore.rules
+            firebase/firestore.rules
 
       - name: Deploy
         uses: w9jds/firebase-action@master
