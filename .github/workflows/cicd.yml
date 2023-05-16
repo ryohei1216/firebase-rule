@@ -8,12 +8,17 @@ jobs:
     name: Deploy Firebase Rules 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
+      - name: Checkout
         uses: actions/checkout@v3
-      - run: |
-            echo ${{ env.FIREBASE_PROJECT_ID }}
-            echo ${{ secrets.FIREBASE_TOKEN }}
-      - name: deploy
+
+      - name: Check Diff Firestore Rules
+        id: diff_firestore_rules
+        uses: technote-space/get-diff-action@v5
+        with:
+          PATTERNS: |
+            firestore.rules
+
+      - name: Deploy
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only firestore:rules
@@ -21,3 +26,4 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: fir-rule-c8168
           PROJECT_PATH: ./firebase
+        if: steps.diff_firestore_rules.outputs.diff
