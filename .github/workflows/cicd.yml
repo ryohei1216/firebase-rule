@@ -27,4 +27,4 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: fir-rule-c8168
           PROJECT_PATH: ./firebase
-        if: steps.diff_firestore_rules.outputs.diff
+        if: contains(steps.diff_firestore_rules.outputs.diff, 'firebase/firestore.rules')
