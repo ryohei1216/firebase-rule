@@ -2,6 +2,7 @@ name: Deploy Firebase Security Rules
 on:
   push:
     branches:
+      - develop
       - main
 
 jobs:
@@ -19,7 +20,7 @@ jobs:
           FILES: |
             firestore.rules
 
-      - name: Deploy
+      - name: Deploy dev
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only firestore:rules
@@ -27,4 +28,14 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: fir-rule-c8168
           PROJECT_PATH: ./firebase
-        if: contains(steps.diff_firestore_rules.outputs.diff, 'firebase/firestore.rules')
+        if: contains(steps.diff_firestore_rules.outputs.diff, 'firebase/firestore.rules') && github.ref == 'refs/heads/development'
+
+      - name: Deploy prod
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only firestore:rules
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: fir-rule-c8168
+          PROJECT_PATH: ./firebase
+        if: contains(steps.diff_firestore_rules.outputs.diff, 'firebase/firestore.rules') && github.ref == 'refs/heads/main'
