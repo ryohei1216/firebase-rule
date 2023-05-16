@@ -18,7 +18,11 @@ jobs:
         uses: technote-space/get-diff-action@v5
         with:
           PATTERNS: |
-            ./**/firestore.rules
+            firestore.rules
+
+      - name: echo
+        run: echo ${{ steps.diff_firestore_rules.outputs.diff }}
+        run: echo ${{ env.GIT_DIFF }}
 
       - name: Deploy
         uses: w9jds/firebase-action@master
