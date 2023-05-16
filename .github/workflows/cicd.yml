@@ -1,11 +1,8 @@
 name: Deploy Firebase Security Rules
 on:
-  workflow_dispatch:
-  pull_request:
+  push:
     branches:
       - main
-    types:
-      - closed
 
 jobs:
   apply-security-rules:
