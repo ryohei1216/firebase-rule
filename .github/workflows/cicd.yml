@@ -19,7 +19,7 @@ jobs:
       - name: Deploy prod
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only firestore
+          args: deploy --force --only firestore
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
