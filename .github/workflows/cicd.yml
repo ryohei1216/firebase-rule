@@ -18,7 +18,7 @@ jobs:
       - name: Deploy dev
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only firestore:rules
+          args: deploy --only firestore:rules, indexes
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
@@ -28,7 +28,7 @@ jobs:
       - name: Deploy prod
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only firestore:rules
+          args: deploy --only firestore:rules, indexes
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
