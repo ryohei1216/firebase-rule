@@ -11,19 +11,10 @@ jobs:
   apply-security-rules:
     name: Deploy Firebase Rules 
     runs-on: ubuntu-latest
+    environment: FIREBASE
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Deploy dev
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only firestore:rules, indexes
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
-          PROJECT_PATH: ./firebase
-        if: github.ref_name == 'develop'
 
       - name: Deploy prod
         uses: w9jds/firebase-action@master
