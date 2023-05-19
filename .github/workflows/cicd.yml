@@ -21,9 +21,9 @@ jobs:
           args: deploy --only firestore:rules
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          PROJECT_ID: fir-rule-c8168
+          PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
           PROJECT_PATH: ./firebase
-        if: github.ref == 'refs/heads/development'
+        if: github.ref_name == 'develop'
 
       - name: Deploy prod
         uses: w9jds/firebase-action@master
@@ -31,6 +31,6 @@ jobs:
           args: deploy --only firestore:rules
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          PROJECT_ID: fir-rule-c8168
+          PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
           PROJECT_PATH: ./firebase
-        if: github.ref == 'refs/heads/main'
+        if: github.ref_name == 'main'
