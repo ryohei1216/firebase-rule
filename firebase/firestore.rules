@@ -1,8 +1,75 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+    // Allow only authenticated content owners access
+    match /projects/{projectId}/customers/{customerId}/public/state {
+      // 自分のデータのみ読み取りが可能
+      allow read: if request.auth != null && request.auth.uid == customerId
     }
+
+    match /projects/{projectId}/operatorGroups/{operatorGroupId}/public/state {
+      // 自分のデータのみ読み取りが可能
+      // 対象のオペレーターグループのドキュメント配下に自分のドキュメントがあることを確認している
+      allow read: if request.auth != null && exists(/databases/$(database)/documents/projects/$(projectId)/operatorGroups/$(operatorGroupId)/public/state/operators/$(request.auth.uid)/public/state)
+    }
+
+    match /projects/{projectId}/operatorGroups/{operatorGroupId}/public/state/roomInvocations/{roomInvocation} {
+      // 自分のデータのみ読み取りが可能
+      // 対象のオペレーターグループのドキュメント配下に自分のドキュメントがあることを確認している
+      allow read: if request.auth != null && exists(/databases/$(database)/documents/projects/$(projectId)/operatorGroups/$(operatorGroupId)/public/state/operators/$(request.auth.uid)/public/state)
+    }
+
+    match /projects/{projectId}/operatorGroups/{operatorGroupId}/public/state/operators/{operatorId}/public/state {
+      // 自分のデータのみ読み取りが可能
+      allow read: if request.auth != null && request.auth.uid == operatorId
+    }
+
+    match /projects/{projectId}/chatbots/{chatbotId} {
+      allow read, write: if request.auth != null
+
+      match /channels/{channelId} {
+        // 読み書き許可
+        allow create: if request.auth != null && !exists(/databases/$(database)/documents/projects/$(projectId)/chatbots/$(chatbotId)/channels/$(channelId))
+    	  allow read, write: if request.auth != null && get(/databases/$(database)/documents/projects/$(projectId)/chatbots/$(chatbotId)/channels/$(channelId)).data.uid == request.auth.uid
+
+        match /chatLog/{chatLogId} {
+          // 読み書き許可
+          allow read, write: if request.auth != null && get(/databases/$(database)/documents/projects/$(projectId)/chatbots/$(chatbotId)/channels/$(channelId)).data.uid == request.auth.uid
+        }
+      }
+    }
+
+    match /projects/{projectId}/rooms/{roomId} {
+      function isValidOperator(userId) {
+        let operatorUidList= get(/databases/$(database)/documents/projects/$(projectId)/rooms/$(roomId)).data.operatorUidList;
+        let isValid = userId in operatorUidList;
+        return isValid;
+      }
+      function isValidCustomer(userId) {
+        let customerUidList = get(/databases/$(database)/documents/projects/$(projectId)/rooms/$(roomId)).data.customerUidList;
+        let isValid = userId in customerUidList;
+        return isValid;
+      }
+      function findUser(userId) {
+        return isValidOperator(userId) || isValidCustomer(userId);
+      }
+      // 読み込み許可
+      allow read: if request.auth != null && findUser(request.auth.uid)
+
+      match /session/{sessionId} {
+        // 読み込み許可
+        allow read: if request.auth != null && findUser(request.auth.uid)
+
+        match /history/{historyId} {
+          // 読み込み許可
+          allow read: if request.auth != null && findUser(request.auth.uid)
+        }
+      }
+    }
+  }
+
+  match /{document=**} {
+    allow read, write: if false;
   }
 }

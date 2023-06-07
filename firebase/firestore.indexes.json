@@ -41,7 +41,7 @@
           "order": "DESCENDING"
         },
         {
-          "fieldPath": "answerAT",
+          "fieldPath": "answerAt",
           "order": "DESCENDING"
         },
         {
