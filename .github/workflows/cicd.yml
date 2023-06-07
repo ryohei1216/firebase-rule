@@ -1,5 +1,6 @@
 name: Deploy Firebase Security Rules
 on:
+  workflow_dispatch:
   push:
     paths:
       - firebase/**
