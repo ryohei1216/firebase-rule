@@ -1,0 +1,20 @@
+{
+    "rules": {
+      "customers": {
+        "status": {
+          "$userId": {
+            ".read": "auth.uid == $userId",
+            ".write": "auth.uid == $userId"
+          }
+        }
+      },
+      "operators": {
+        "status": {
+          "$userId": {
+            ".read": "auth.uid == $userId",
+            ".write": "auth.uid == $userId"
+          }
+        }
+      }
+    }
+  }
